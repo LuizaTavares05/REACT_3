@@ -1,57 +1,77 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import Header from '../../components/Header'; 
 import Footer from '../../components/Footer';
 
-export default function Home({ navigation }) {
+export default function Home() {
+  
+  const nomeDoUsuarioLogado = "Aluno";
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.telaContainer}>
+      <Header nomeUsuario={nomeDoUsuarioLogado} />
       
-      <Text style={styles.titulo}>Bem-vindo ao Portal Acadêmico</Text>
-      
-      <Text style={styles.descricao}>
-        Selecione uma opção abaixo para navegar entre as seções do sistema.
-      </Text>
-      
-      <View style={styles.gridCards}>
-
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => alert("Página Alunos")} 
-          activeOpacity={0.6}>
-          <Text style={styles.cardIcone}>👥</Text>
-          <Text style={styles.cardTitulo}>Alunos</Text>
-          <Text style={styles.cardDescricao}>
-            Gerencie a lista de alunos, crie novos registros e edite informações existentes.
-          </Text>
-        </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
         
-        <TouchableOpacity 
-          style={styles.card} 
-          onPress={() => alert("Página Disciplinas")}
-          activeOpacity={0.6}>
-          <Text style={styles.cardIcone}>📚</Text>
-          <Text style={styles.cardTitulo}>Disciplinas</Text>
-          <Text style={styles.cardDescricao}>
-            Visualize a grade curricular e informações sobre as disciplinas ofertadas.
+        <View style={styles.conteudoPrincipal}>
+          <Text style={styles.titulo}>Bem-vindo ao Portal Acadêmico</Text>
+          
+          <Text style={styles.descricao}>
+            Selecione uma opção abaixo para navegar entre as seções do sistema.
           </Text>
-        </TouchableOpacity>
-      </View>
-      <Footer/>
-    </ScrollView>
+          
+          <View style={styles.gridCards}>
+            <TouchableOpacity 
+              style={styles.card} 
+              onPress={() => alert("Página Alunos")} 
+              activeOpacity={0.6}
+            >
+              <Text style={styles.cardIcone}>👥</Text>
+              <Text style={styles.cardTitulo}>Alunos</Text>
+              <Text style={styles.cardDescricao}>
+                Gerencie a lista de alunos, crie novos registros e edite informações existentes.
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity 
+              style={styles.card} 
+              onPress={() => alert("Página Disciplinas")}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.cardIcone}>📚</Text>
+              <Text style={styles.cardTitulo}>Disciplinas</Text>
+              <Text style={styles.cardDescricao}>
+                Visualize a grade curricular e informações sobre as disciplinas ofertadas.
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Footer />     
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  telaContainer: {
+    flex: 1,
+    backgroundColor: '#f5f6fa',
+    padding: 0,
+  },
+  scrollContainer: {
     flexGrow: 1,
-    paddingVertical: 40,
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  conteudoPrincipal: {
+    paddingVertical: 30,
     paddingHorizontal: 20,
-    backgroundColor: '#f5f6fa', 
     alignItems: 'center',
+    width: '100%',
   },
   titulo: {
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '600',
     color: '#2c3e50',
     textAlign: 'center',
@@ -61,7 +81,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#555',
     textAlign: 'center',
-    marginBottom: 40,
+    marginBottom: 35,
     lineHeight: 22,
   },
   gridCards: {
