@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import Footer from '../../components/Footer';
 
 export default function Home({ navigation }) {
 
@@ -35,8 +36,8 @@ export default function Home({ navigation }) {
             Visualize a grade curricular e informações sobre as disciplinas ofertadas.
           </Text>
         </TouchableOpacity>
-
       </View>
+      <Footer/>
     </ScrollView>
   );
 }
