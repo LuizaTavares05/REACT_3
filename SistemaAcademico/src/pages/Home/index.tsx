@@ -13,7 +13,7 @@ export default function Home({ navigation }: any) {
 
   return (
     <View style={styles.telaContainer}>
-      <Header nomeUsuario={nomeDoUsuarioLogado} />
+    <Header nomeUsuario={nomeDoUsuarioLogado} naoVoltar={true} />
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.conteudoPrincipal}>

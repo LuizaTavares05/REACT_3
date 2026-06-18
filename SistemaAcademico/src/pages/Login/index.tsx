@@ -10,8 +10,7 @@ export default function Login({ navigation }: any) {
 
     return (
         <View style={styles.telaContainer}>
-            <Header nomeUsuario="Visitante" />
-
+            <Header nomeUsuario="Visitante" noLogin={true} />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.centralizador}>
                     
