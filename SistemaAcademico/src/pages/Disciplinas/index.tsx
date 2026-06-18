@@ -53,7 +53,7 @@ export default function Disciplinas() {
 
           <FlatList
             data={disciplinas}
-            keyExtractor={(index) => index.toString()}
+            keyExtractor={(item, index) => index.toString()}
             numColumns={2}
             scrollEnabled={false}
             columnWrapperStyle={styles.linhaGrid}
@@ -99,18 +99,22 @@ flex: 1,
   },
   titulo: {
     padding: 20,
-    fontSize: 28,
-    fontWeight: "bold",
+    fontSize: 24,
+    fontWeight: '600',
+    color: '#2c3e50',
     textAlign: "center",
   },
 
   subtitulo: {
     fontSize: 18,
+    fontWeight: '600',
+    color: '#2c3e50',
     textAlign: "center",
-    marginTop: 10,
   },
 
   descricao: {
+    fontSize: 16,
+    color: '#555',
     textAlign: "center",
     marginBottom: 20,
     marginTop: 10,
@@ -126,7 +130,7 @@ flex: 1,
   },
 
   card: {
-backgroundColor: "#fff",
+    backgroundColor: "#fff",
     marginVertical: 8,
     padding: 15,
     borderRadius: 12,

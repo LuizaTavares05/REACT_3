@@ -2,12 +2,22 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-export default function Header({ nomeUsuario }: any) {
+interface HeaderProps {
+  nomeUsuario: string;
+  noLogin?: boolean; 
+  naoVoltar?: boolean;
+}
+
+export default function Header({ nomeUsuario, noLogin = false, naoVoltar = false }: HeaderProps) {
 
   const navigation = useNavigation<any>();
 
   function handleLogout() {
     navigation.navigate('Login');
+  }
+
+  function handleVoltar() {
+    navigation.navigate('Home');
   }
 
   return (
@@ -16,18 +26,31 @@ export default function Header({ nomeUsuario }: any) {
         <Text style={styles.titulo}>Sistema Acadêmico</Text>
       </View>
 
-      <View style={styles.linhaInferior}>
-        {nomeUsuario ? (
-          <Text style={styles.nomeUsuario}>Olá, {nomeUsuario}!</Text>
-        ) : null}
+      {!noLogin && (
+        <View style={styles.linhaInferior}>
+          {nomeUsuario ? (
+            <Text style={styles.nomeUsuario}>Olá, {nomeUsuario}!</Text>
+          ) : null}
+          
+          <View style={styles.grupoBotoes}>
 
-        <TouchableOpacity
-          style={styles.btnLogout}
-          onPress={handleLogout}
-        >
-          <Text style={styles.btnLogoutTexto}>Sair</Text>
-        </TouchableOpacity>
-      </View>
+            {!naoVoltar && (
+              <TouchableOpacity
+                style={styles.btnVoltar}
+                onPress={handleVoltar}
+                activeOpacity={0.7}>
+                <Text style={styles.btnVoltarTexto}>Voltar</Text>
+              </TouchableOpacity>
+              )}
+              
+              <TouchableOpacity
+                style={styles.btnLogout}
+                onPress={handleLogout}>
+                <Text style={styles.btnLogoutTexto}>Sair</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+       )}
     </View>
   );
 }
@@ -78,6 +101,23 @@ const styles = StyleSheet.create({
     color: 'rgba(255, 255, 255, 0.9)',
     fontSize: 14,
     fontWeight: '500',
+    flex: 1, 
+    marginRight: 10,
+  },
+  grupoBotoes: {
+    flexDirection: 'row',
+    gap: 8,
+  },
+  btnVoltar: {
+    backgroundColor: '#475569', 
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 6,
+  },
+  btnVoltarTexto: {
+    color: '#ffffff',
+    fontSize: 13,
+    fontWeight: '600',
   },
   btnLogout: {
     backgroundColor: '#ef4444',
