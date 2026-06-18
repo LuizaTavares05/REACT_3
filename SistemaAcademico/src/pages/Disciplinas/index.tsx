@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import Header  from '../../components/header';
+import Footer from '../../components/footer';
 
 export default function Disciplinas() {
 
@@ -38,8 +41,12 @@ export default function Disciplinas() {
    
    ];
 
-  return (
+   const nomeDoUsuarioLogado = "Aluno";
+
+    return (
+   
     <View style = {styles.container}>
+      <Header nomeUsuario={nomeDoUsuarioLogado} />
       <Text style = {styles.titulo}>Disciplinas</Text>
       <Text style = {styles.subtitulo}>Gerenciamento das disciplinas</Text>
       <Text style = {styles.descricao}>Visualize as disciplinas disponíveis</Text>
@@ -60,6 +67,7 @@ export default function Disciplinas() {
             </View>
             )}
         />
+      <Footer />   
     </View>    
   );
 }
