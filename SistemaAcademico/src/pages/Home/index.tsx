@@ -51,6 +51,19 @@ export default function Home({ navigation }: any) {
                 ofertadas.
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.card}
+              onPress={() => navigation.navigate('Sobre')}
+              activeOpacity={0.6}
+            >
+              <Text style={styles.cardIcone}>📖</Text>
+              <Text style={styles.cardTitulo}>Sobre</Text>
+              <Text style={styles.cardDescricao}>
+                Saiba um pouco mais sobre nós.
+              </Text>
+            </TouchableOpacity>
+
           </View>
         </View>
 
