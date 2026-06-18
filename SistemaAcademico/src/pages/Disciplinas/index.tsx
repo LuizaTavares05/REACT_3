@@ -1,134 +1,166 @@
-import { useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import Header  from '../../components/header';
-import Footer from '../../components/footer';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView, } from "react-native";
+import Header from "../../components/Header";
+import Footer from "../../components/Footer";
 
 export default function Disciplinas() {
-
-   const disciplinas = [
-   {
-   nome: "Programação Web",
-   cargaHoraria: "80h"
+  const disciplinas = [
+    {
+      nome: "Programação Web",
+      cargaHoraria: "80h",
     },
-   {
-   nome: "Banco de Dados",
-   cargaHoraria: "60h"
-   },
-   {
-   nome: "Estrutura de Dados",
-   cargaHoraria: "80h"
-   },
-   {
-   nome: "Programação Orientada a Objetos",
-   cargaHoraria: "80h"
-   },
-   {
-   nome: "Engenharia de Software",
-   cargaHoraria: "60h"
-   },
-   {
-   nome: "Redes de Computadores",
-   cargaHoraria: "60h"
-   },
-   {
-   nome: "Segurança da Informação",
-   cargaHoraria: "40h"
-   },
-   {
-   nome: "Desenvolvimento Mobile",
-   cargaHoraria: "60h"
-   },
-   
-   ];
+    {
+      nome: "Banco de Dados",
+      cargaHoraria: "60h",
+    },
+    {
+      nome: "Estrutura de Dados",
+      cargaHoraria: "80h",
+    },
+    {
+      nome: "Programação Orientada a Objetos",
+      cargaHoraria: "80h",
+    },
+    {
+      nome: "Engenharia de Software",
+      cargaHoraria: "60h",
+    },
+    {
+      nome: "Redes de Computadores",
+      cargaHoraria: "60h",
+    },
+    {
+      nome: "Segurança da Informação",
+      cargaHoraria: "40h",
+    },
+    {
+      nome: "Desenvolvimento Mobile",
+      cargaHoraria: "60h",
+    },
+  ];
 
-   const nomeDoUsuarioLogado = "Aluno";
+  const nomeDoUsuarioLogado = "Visitante";
 
-    return (
-   
-    <View style = {styles.container}>
+  return (
+    <View style={styles.container}>
       <Header nomeUsuario={nomeDoUsuarioLogado} />
-      <Text style = {styles.titulo}>Disciplinas</Text>
-      <Text style = {styles.subtitulo}>Gerenciamento das disciplinas</Text>
-      <Text style = {styles.descricao}>Visualize as disciplinas disponíveis</Text>
-   
-        <FlatList
-            data={disciplinas} 
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.conteudoPrincipal}>
+          <Text style={styles.titulo}>Disciplinas</Text>
+          <Text style={styles.subtitulo}>Gerenciamento das disciplinas</Text>
+          <Text style={styles.descricao}>
+            Visualize as disciplinas disponíveis
+          </Text>
+
+          <FlatList
+            data={disciplinas}
             keyExtractor={(index) => index.toString()}
             numColumns={2}
-            showsVerticalScrollIndicator = {false}
-            renderItem={({item}) => (
-             <View style = {styles.card}>
+            scrollEnabled={false}
+            columnWrapperStyle={styles.linhaGrid}
+            showsVerticalScrollIndicator={false}
+            style={styles.lista}
+            renderItem={({ item }) => (
+              <View style={styles.card}>
                 <Text style={styles.nome}>{item.nome}</Text>
-                <Text style = {styles.carga}>Carga Horária: {item.cargaHoraria}</Text>
+                <Text style={styles.carga}>
+                  Carga Horária: {item.cargaHoraria}
+                </Text>
 
-                    <TouchableOpacity style = {styles.botao}>
-                        <Text style = {styles.botaoTexto}>Ver Conteúdo</Text>
-                    </TouchableOpacity>
-            </View>
+                <TouchableOpacity style={styles.botao}>
+                  <Text style={styles.botaoTexto}>Ver Conteúdo</Text>
+                </TouchableOpacity>
+              </View>
             )}
-        />
-      <Footer />   
-    </View>    
+          />
+        </View>
+
+        <Footer />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+flex: 1,
+    backgroundColor: '#f5f6fa',
+    padding: 0,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  conteudoPrincipal: {
+    paddingVertical: 30,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    width: '100%',
+  },
+  titulo: {
+    padding: 20,
+    fontSize: 28,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 
- container: {
-  flex: 1,
-  padding: 20,
-  backgroundColor: "#f5f5f5"
- },
+  subtitulo: {
+    fontSize: 18,
+    textAlign: "center",
+    marginTop: 10,
+  },
 
- titulo: {
-  padding:20,
-  fontSize: 28,
-  fontWeight: "bold",
-  textAlign: "center"
- },
+  descricao: {
+    textAlign: "center",
+    marginBottom: 20,
+    marginTop: 10,
+  },
 
- subtitulo: {
-  fontSize: 18,
-  textAlign: "center",
-  marginTop: 10
- },
+  lista: {
+    width: '100%',
+  },
 
- descricao: {
-  textAlign: "center",
-  marginBottom: 20,
-  marginTop: 10
- },
+  linhaGrid: {
+    justifyContent: 'space-between',
+    width: '100%',
+  },
 
- card: {
-  flex: 1,
-  backgroundColor: "#fff",
-  margin: 8,
-  padding: 15,
-  borderRadius: 12,
-  elevation: 4
- },
+  card: {
+backgroundColor: "#fff",
+    marginVertical: 8,
+    padding: 15,
+    borderRadius: 12,
+    elevation: 4,
+    width: '48%',
+    justifyContent: 'space-between',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 8,
+  },
 
- nome: {
-  fontSize: 16,
-  fontWeight: "bold",
-  color: "#003366",
-  marginBottom: 10
- },
+  nome: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#003366",
+    marginBottom: 10,
+    minHeight: 44,
+  },
 
- carga: {
-  color: "#555",
-  marginBottom: 15
- },
+  carga: {
+    color: "#555",
+    marginBottom: 15,
+  },
 
- botao: {
-  backgroundColor: "#003366",
-  padding: 10,
-  borderRadius: 8
- },
+  botao: {
+    backgroundColor: "#003366",
+    padding: 10,
+    borderRadius: 8,
+    minHeight: 44,
+  },
 
- botaoTexto: {
-  color: "#fff",
-  textAlign: "center"
- }
-
+  botaoTexto: {
+    color: "#fff",
+    textAlign: "center",
+  },
 });

@@ -4,10 +4,10 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Home({ navigation }: any) {
-  const nomeDoUsuarioLogado = 'Aluno';
+  const nomeDoUsuarioLogado = 'Visitante';
 
     useEffect(() => {
-    alert("Bem-Vindo!")
+    alert(`Bem-Vindo! ${nomeDoUsuarioLogado}`)
 
   }, []);
 

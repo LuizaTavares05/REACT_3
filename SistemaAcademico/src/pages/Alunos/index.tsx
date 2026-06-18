@@ -5,7 +5,7 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 export default function Alunos() {
-  const nomeDoUsuarioLogado = "Aluno";
+  const nomeDoUsuarioLogado = "Visitante";
 
   return (
     <View style={styles.telaContainer}>
