@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
 
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";

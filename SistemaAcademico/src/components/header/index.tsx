@@ -1,43 +1,33 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Header({ nomeUsuario }) {
+export default function Header({ nomeUsuario }: any) {
 
-  const usuarioLogado = true;
-  let tema: "claro" | "escuro" = "escuro";
+  const navigation = useNavigation<any>();
+
+  function handleLogout() {
+    navigation.navigate('Login');
+  }
 
   return (
     <View style={styles.headerContainer}>
       <View style={styles.linhaSuperior}>
         <Text style={styles.titulo}>Sistema Acadêmico</Text>
-
-        <TouchableOpacity 
-          style={[
-            styles.btnTema, 
-            { backgroundColor: tema === "claro" ? "#fafafa" : "#34495e" }
-          ]}
-          onPress={() => alert("Alterar Tema")}
-          activeOpacity={0.8} >
-          <Text style={[styles.btnTemaTexto, { color: tema === "claro" ? "black" : "white" }]}>
-            {tema === "claro" ? "☀ Claro" : "🌙 Escuro"}
-          </Text>
-        </TouchableOpacity>
       </View>
 
-      {usuarioLogado && (
-        <View style={styles.linhaInferior}>
-          {nomeUsuario ? (
-            <Text style={styles.nomeUsuario}>Olá, {nomeUsuario}!</Text>
-          ) : null}
-          <TouchableOpacity 
-            style={styles.btnLogout} 
-            onPress={() => alert("Fazer Logout")}
-            activeOpacity={0.8}>
-            <Text style={styles.btnLogoutTexto}>Sair</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <View style={styles.linhaInferior}>
+        {nomeUsuario ? (
+          <Text style={styles.nomeUsuario}>Olá, {nomeUsuario}!</Text>
+        ) : null}
 
+        <TouchableOpacity
+          style={styles.btnLogout}
+          onPress={handleLogout}
+        >
+          <Text style={styles.btnLogoutTexto}>Sair</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
