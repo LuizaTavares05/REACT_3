@@ -38,11 +38,9 @@ export default function Disciplinas() {
     },
   ];
 
-  const nomeDoUsuarioLogado = "Visitante";
-
   return (
     <View style={styles.container}>
-      <Header nomeUsuario={nomeDoUsuarioLogado} />
+      <Header/>
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.conteudoPrincipal}>
           <Text style={styles.titulo}>Disciplinas</Text>

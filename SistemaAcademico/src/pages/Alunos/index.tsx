@@ -5,11 +5,10 @@ import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 
 export default function Alunos() {
-  const nomeDoUsuarioLogado = "Visitante";
 
   return (
     <View style={styles.telaContainer}>
-      <Header nomeUsuario={nomeDoUsuarioLogado} />
+      <Header/>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.container}>
