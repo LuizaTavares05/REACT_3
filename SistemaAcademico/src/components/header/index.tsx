@@ -1,18 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../context/AuthContext';
 
 interface HeaderProps {
-  nomeUsuario: string;
   noLogin?: boolean; 
   naoVoltar?: boolean;
 }
 
-export default function Header({ nomeUsuario, noLogin = false, naoVoltar = false }: HeaderProps) {
-
+export default function Header({ noLogin = false, naoVoltar = false }: HeaderProps) {
   const navigation = useNavigation<any>();
+  const { logout, primeiroNome } = useAuth();
 
   function handleLogout() {
+    logout();
     navigation.navigate('Login');
   }
 
@@ -28,8 +29,8 @@ export default function Header({ nomeUsuario, noLogin = false, naoVoltar = false
 
       {!noLogin && (
         <View style={styles.linhaInferior}>
-          {nomeUsuario ? (
-            <Text style={styles.nomeUsuario}>Olá, {nomeUsuario}!</Text>
+          {primeiroNome ? (
+            <Text style={styles.nomeUsuario}>Olá, {primeiroNome.charAt(0).toUpperCase() + primeiroNome.slice(1)}!</Text>
           ) : null}
           
           <View style={styles.grupoBotoes}>
