@@ -4,6 +4,7 @@ import Login from "../pages/Login";
 import Home from "../pages/Home";
 import Alunos from "../pages/Alunos";
 import Disciplinas from "../pages/Disciplinas";
+import Sobre from "../pages/Sobre";
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,12 @@ export default function Routes() {
           name="Disciplinas"
           component={Disciplinas}
         />
+
+        <Stack.Screen
+          name="Sobre"
+          component={Sobre}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
