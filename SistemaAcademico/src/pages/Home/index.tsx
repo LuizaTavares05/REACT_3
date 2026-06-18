@@ -1,10 +1,15 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Alert, } from 'react-native';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Home({ navigation }: any) {
   const nomeDoUsuarioLogado = 'Aluno';
+
+    useEffect(() => {
+    alert("Bem-Vindo!")
+
+  }, []);
 
   return (
     <View style={styles.telaContainer}>
@@ -36,7 +41,7 @@ export default function Home({ navigation }: any) {
 
             <TouchableOpacity
               style={styles.card}
-              onPress={() => alert('Página Disciplinas')}
+              onPress={() => navigation.navigate('Disciplinas')}
               activeOpacity={0.6}
             >
               <Text style={styles.cardIcone}>📚</Text>
