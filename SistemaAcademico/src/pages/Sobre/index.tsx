@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Sobre({ navigation }: any) {
-  const nomeDoUsuarioLogado = 'Aluno';
+  const nomeDoUsuarioLogado = 'Visitante';
 
           const integrantes = [
             {
