@@ -1,168 +1,175 @@
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ScrollView, } from "react-native";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+import { useState } from 'react';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, TextInput } from 'react-native';
+import Header  from '../../components/Header';
+import Footer from '../../components/Footer';
 
 export default function Disciplinas() {
-  const disciplinas = [
-    {
-      nome: "Programação Web",
-      cargaHoraria: "80h",
-    },
-    {
-      nome: "Banco de Dados",
-      cargaHoraria: "60h",
-    },
-    {
-      nome: "Estrutura de Dados",
-      cargaHoraria: "80h",
-    },
-    {
-      nome: "Programação Orientada a Objetos",
-      cargaHoraria: "80h",
-    },
-    {
-      nome: "Engenharia de Software",
-      cargaHoraria: "60h",
-    },
-    {
-      nome: "Redes de Computadores",
-      cargaHoraria: "60h",
-    },
-    {
-      nome: "Segurança da Informação",
-      cargaHoraria: "40h",
-    },
-    {
-      nome: "Desenvolvimento Mobile",
-      cargaHoraria: "60h",
-    },
-  ];
 
-  return (
-    <View style={styles.container}>
-      <Header/>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.conteudoPrincipal}>
-          <Text style={styles.titulo}>Disciplinas</Text>
-          <Text style={styles.subtitulo}>Gerenciamento das disciplinas</Text>
-          <Text style={styles.descricao}>
-            Visualize as disciplinas disponíveis
-          </Text>
+   const disciplinas = [
+     {
+   nome: "Big Data",
+   cargaHoraria: "80h"
+    },
+     {
+   nome: "Banco de Dados",
+   cargaHoraria: "60h"
+    },
+   {
+   nome: "Programação Web",
+   cargaHoraria: "80h"
+    },
+     {
+   nome: "Estrutura de Dados",
+   cargaHoraria: "80h"
+   },
+ 
+   {
+    nome: "Inteligência Artificial",
+    cargaHoraria: "60h"
+  },
+  
+    {
+   nome: "Computação em Nuvem (Cloud)",
+   cargaHoraria: "60h"
+   },
+   
+   {
+   nome: "Engenharia de Software",
+   cargaHoraria: "70h"
+   },
+   {
+   nome: "Redes de Computadores",
+   cargaHoraria: "60h"
+   },
+   {
+   nome: "Segurança da Informação",
+   cargaHoraria: "40h"
+   },
+   {
+   nome: "Desenvolvimento Mobile",
+   cargaHoraria: "60h"
+   },   
+   ];
 
-          <FlatList
-            data={disciplinas}
-            keyExtractor={(item, index) => index.toString()}
+   const nomeDoUsuarioLogado = "Aluno";
+
+   const [pesquisa, setPesquisa] = useState ("");
+   const disciplinasFiltradas = disciplinas.filter((disciplinas) => 
+    disciplinas.nome.toLowerCase().includes(pesquisa.toLowerCase()));
+
+    return (
+   
+    <View style = {styles.container}>
+      <Header nomeUsuario={nomeDoUsuarioLogado} />
+
+      <Text style = {styles.titulo}>Disciplinas</Text>
+      <Text style = {styles.subtitulo}>Gerenciamento das disciplinas</Text>
+      <Text style = {styles.descricao}>Visualize as disciplinas disponíveis</Text>
+
+      <TextInput style = {styles.input} placeholder=' Pesquisar disciplina ' value={pesquisa} onChangeText={setPesquisa} />
+   
+        <FlatList
+            data={disciplinasFiltradas} 
+            keyExtractor={(index) => index.toString()}
             numColumns={2}
-            scrollEnabled={false}
-            columnWrapperStyle={styles.linhaGrid}
-            showsVerticalScrollIndicator={false}
-            style={styles.lista}
-            renderItem={({ item }) => (
-              <View style={styles.card}>
+            showsVerticalScrollIndicator = {false}
+
+            ListEmptyComponent={
+              <Text style = {styles.naoEncontrado}>Nenhuma disciplina encontrada!</Text>
+            }
+
+            renderItem={({item}) => (
+             <View style = {styles.card}>
                 <Text style={styles.nome}>{item.nome}</Text>
-                <Text style={styles.carga}>
-                  Carga Horária: {item.cargaHoraria}
-                </Text>
+                <Text style = {styles.carga}>Carga Horária: {item.cargaHoraria}</Text>
 
-                <TouchableOpacity style={styles.botao}>
-                  <Text style={styles.botaoTexto}>Ver Conteúdo</Text>
-                </TouchableOpacity>
-              </View>
+                    <TouchableOpacity style = {styles.botao}>
+                        <Text style = {styles.botaoTexto}>Ver Conteúdo</Text>
+                    </TouchableOpacity>
+            </View>
             )}
-          />
-        </View>
-
-        <Footer />
-      </ScrollView>
-    </View>
+        />
+      <Footer />   
+    </View>    
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-flex: 1,
-    backgroundColor: '#f5f6fa',
-    padding: 0,
-  },
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: 'space-between',
-    width: '100%',
-  },
-  conteudoPrincipal: {
-    paddingVertical: 30,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    width: '100%',
-  },
-  titulo: {
-    padding: 20,
-    fontSize: 24,
-    fontWeight: '600',
-    color: '#2c3e50',
-    textAlign: "center",
-  },
 
-  subtitulo: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2c3e50',
-    textAlign: "center",
-  },
+ container: {
+  flex: 1,
+  padding: 20,
+  backgroundColor: "#f5f5f5"
+ },
 
-  descricao: {
-    fontSize: 16,
-    color: '#555',
-    textAlign: "center",
-    marginBottom: 20,
-    marginTop: 10,
-  },
+ titulo: {
+  padding:20,
+  fontSize: 28,
+  fontWeight: "bold",
+  textAlign: "center"
+ },
 
-  lista: {
-    width: '100%',
-  },
+ subtitulo: {
+  fontSize: 18,
+  textAlign: "center",
+  marginTop: 10
+ },
 
-  linhaGrid: {
-    justifyContent: 'space-between',
-    width: '100%',
-  },
+ descricao: {
+  textAlign: "center",
+  marginBottom: 20,
+  marginTop: 10
+ },
 
-  card: {
-    backgroundColor: "#fff",
-    marginVertical: 8,
-    padding: 15,
-    borderRadius: 12,
-    elevation: 4,
-    width: '48%',
-    justifyContent: 'space-between',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-  },
+ card: {
+  flex: 1,
+  backgroundColor: "#fff",
+  margin: 8,
+  padding: 15,
+  borderRadius: 12,
+  elevation: 4
+ },
 
-  nome: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#003366",
-    marginBottom: 10,
-    minHeight: 44,
-  },
+ nome: {
+  fontSize: 16,
+  fontWeight: "bold",
+  color: "#003366",
+  marginBottom: 10
+ },
 
-  carga: {
-    color: "#555",
-    marginBottom: 15,
-  },
+ carga: {
+  color: "#555",
+  marginBottom: 15
+ },
 
-  botao: {
-    backgroundColor: "#003366",
-    padding: 10,
-    borderRadius: 8,
-    minHeight: 44,
-  },
+ botao: {
+  backgroundColor: "#003366",
+  padding: 10,
+  borderRadius: 8
+ },
 
-  botaoTexto: {
-    color: "#fff",
-    textAlign: "center",
-  },
+ botaoTexto: {
+  color: "#fff",
+  textAlign: "center"
+ },
+
+ input:{
+  backgroundColor: "#fff",
+  borderRadius: 8,
+  paddingVertical: 12,
+  paddingHorizontal:10,
+  color: "#555",
+  borderWidth: 1.5,
+  borderColor: "#003366",
+  fontSize:16,
+  marginBottom:15,
+ },
+
+ naoEncontrado:{
+  textAlign: "center",
+  fontSize: 16,
+  color: "#555",  
+ }
+
 });
+
