@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { useAuth } from '../../../context/AuthContext'; 
 import api from '../../../services/api';
 
 export default function EditarAluno() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
+  const { cores } = useAuth();
 
   const { id } = route.params || {}; 
 
@@ -42,7 +43,6 @@ export default function EditarAluno() {
   }, [id, navigation]);
 
   const atualizarAluno = async () => {
-
     if (!nome.trim() || !matricula.trim() || !curso.trim()) {
       Alert.alert("Aviso", "Todos os campos são obrigatórios.");
       return;
@@ -65,39 +65,39 @@ export default function EditarAluno() {
 
   if (carregando) {
     return (
-      <View style={styles.containerCentrado}>
+      <View style={[styles.containerCentrado, { backgroundColor: cores.background }]}>
         <ActivityIndicator size="large" color="#3b82f6" />
-        <Text style={styles.textoCarregando}>Carregando dados...</Text>
+        <Text style={[styles.textoCarregando, { color: cores.texto }]}>Carregando dados...</Text>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.criarWrapper}>
-      <Text style={styles.criarTitle}>Editar Informações do Aluno</Text>
+    <View style={[styles.criarWrapper, { backgroundColor: cores.background }]}>
+      <Text style={[styles.criarTitle, { color: cores.texto }]}>Editar Informações do Aluno</Text>
       
-      <View style={styles.formulario}>
+      <View style={[styles.formulario, { backgroundColor: cores.card, borderColor: cores.borda }]}>
         <TextInput 
-          style={styles.input}
+          style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
           placeholder="Nome do Aluno" 
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={cores.textoSecundario}
           value={nome} 
           onChangeText={setNome} 
         />
         
         <TextInput 
-          style={styles.input}
+          style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
           placeholder="Matrícula" 
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={cores.textoSecundario}
           keyboardType="numeric"
           value={matricula} 
           onChangeText={setMatricula} 
         />
         
         <TextInput 
-          style={styles.input}
+          style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
           placeholder="Curso" 
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={cores.textoSecundario}
           value={curso} 
           onChangeText={setCurso} 
         />
@@ -120,7 +120,7 @@ export default function EditarAluno() {
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
@@ -128,51 +128,41 @@ const styles = StyleSheet.create({
   criarWrapper: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f3f4f6',
+    justifyContent: "center",
   },
   containerCentrado: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f3f4f6',
   },
   textoCarregando: {
     marginTop: 10,
-    color: '#1e3a5f',
     fontSize: 16,
     fontWeight: '500',
   },
   criarTitle: {
     fontSize: 24,
     fontWeight: '700',
-    color: '#1e3a5f',
     marginBottom: 20,
     textAlign: 'center',
   },
   formulario: {
     width: '100%',
-    backgroundColor: 'white',
     padding: 24,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#e5e7eb',
-    // Sombra para iOS
-    shadowColor: '#303a5f',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    // Sombra para Android
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
     elevation: 4, 
   },
   input: {
     paddingVertical: 12,
     paddingHorizontal: 14,
-    borderWidth: 2,
-    borderColor: '#e5e7eb',
+    borderWidth: 1.5,
     borderRadius: 8,
     fontSize: 14,
-    backgroundColor: '#f9fafb',
-    color: '#000000',
     marginBottom: 14,
   },
   containerBotoes: {
@@ -182,7 +172,7 @@ const styles = StyleSheet.create({
     marginTop: 6,
   },
   btnBase: {
-    flex: 1, // Faz com que os dois botões dividam o espaço igualmente lado a lado
+    flex: 1, 
     padding: 14,
     borderRadius: 8,
     alignItems: 'center',
@@ -191,17 +181,9 @@ const styles = StyleSheet.create({
   },
   btnSalvar: {
     backgroundColor: '#10b981',
-    shadowColor: '#10b981',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
   },
   btnCancelar: {
     backgroundColor: '#ef4444',
-    shadowColor: '#ef4444',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
   },
   btnTexto: {
     color: 'white',

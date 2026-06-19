@@ -10,7 +10,7 @@ export default function Login({ navigation }: any) {
     const [senha, setSenha] = useState('');
     const [carregando, setCarregando] = useState(false);
 
-    const { login } = useAuth();
+    const { login, cores } = useAuth();
 
     async function handleEntrar() {
         if (!email.trim() || !senha.trim()) {
@@ -38,18 +38,18 @@ export default function Login({ navigation }: any) {
     }
 
     return (
-        <View style={styles.telaContainer}>
+        <View style={[styles.telaContainer, { backgroundColor: cores.background }]}>
             <Header noLogin={true} />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.centralizador}>
                     
-                    <View style={styles.containerCard}>
-                        <Text style={styles.titulo}>Acesso ao Sistema</Text>
-                        <Text style={styles.subtitulo}>Faça o login para acessar o sistema</Text>
+                    <View style={[styles.containerCard, { backgroundColor: cores.card }]}>
+                        <Text style={[styles.titulo, { color: cores.texto }]}>Acesso ao Sistema</Text>
+                        <Text style={[styles.subtitulo, { color: cores.textoSecundario }]}>Faça o login para acessar o sistema</Text>
 
                         <View style={styles.formulario}>
                             <View style={styles.campoGrupo}>
-                                <Text style={styles.label}>E-mail:</Text>
+                                <Text style={[styles.label, { color: cores.texto }]}>E-mail:</Text>
                                 <Input
                                     placeholder="exemplo@gmail.com"
                                     value={email}
@@ -60,7 +60,7 @@ export default function Login({ navigation }: any) {
                             </View>
 
                             <View style={styles.campoGrupo}>
-                                <Text style={styles.label}>Senha:</Text>
+                                <Text style={[styles.label, { color: cores.texto }]}>Senha:</Text>
                                 <Input
                                     placeholder="******"
                                     value={senha}
@@ -70,7 +70,7 @@ export default function Login({ navigation }: any) {
                             </View>
                         
                             <TouchableOpacity
-                                style={[styles.btnEntrar, carregando && { opacity: 0.7 }]}
+                                style={[styles.btnEntrar, { backgroundColor: cores.primaria }, carregando && { opacity: 0.7 }]}
                                 onPress={handleEntrar}
                                 disabled={carregando}
                             >
@@ -94,7 +94,6 @@ export default function Login({ navigation }: any) {
 const styles = StyleSheet.create({
     telaContainer: {
         flex: 1,
-        backgroundColor: '#f5f6fa',
     },
     scrollContainer: {
         flexGrow: 1,
@@ -108,13 +107,12 @@ const styles = StyleSheet.create({
         paddingVertical: 40,
     },
     containerCard: {
-        backgroundColor: 'white',
         borderRadius: 12,
         padding: 32,
         width: '100%',
         maxWidth: 380,
         elevation: 8,
-        shadowColor: '#1e3a5f',
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.12,
         shadowRadius: 20,
@@ -122,13 +120,11 @@ const styles = StyleSheet.create({
     titulo: {
         fontSize: 28,
         fontWeight: '700',
-        color: '#1e3a5f',
         textAlign: 'center',
         marginBottom: 8,
     },
     subtitulo: {
         fontSize: 14,
-        color: '#64748b',
         textAlign: 'center',
         marginBottom: 24,
         fontWeight: '500',
@@ -144,19 +140,17 @@ const styles = StyleSheet.create({
     label: {
         fontWeight: '600',
         fontSize: 14,
-        color: '#1f2937',
         textTransform: 'uppercase',
         letterSpacing: 0.5,
     },
     btnEntrar: {
         padding: 12,
-        backgroundColor: '#1e3a5f',
         borderRadius: 8,
         marginTop: 8,
         alignItems: 'center',
         justifyContent: 'center',
         elevation: 3,
-        shadowColor: '#303a5f',
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 12,

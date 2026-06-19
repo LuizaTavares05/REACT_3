@@ -1,21 +1,9 @@
 import React from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  Alert,
-  KeyboardAvoidingView,
-  ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
-  Platform
-} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvoidingView, ScrollView, TouchableWithoutFeedback, Keyboard, Platform } from "react-native";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAuth } from "../../../context/AuthContext";
 import api from "../../../services/api";
 
 const schemaAluno = yup
@@ -27,10 +15,12 @@ const schemaAluno = yup
   .required();
 
 export default function CriarAluno({ navigation }: any) {
+  const { cores } = useAuth();
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schemaAluno),
@@ -44,9 +34,16 @@ export default function CriarAluno({ navigation }: any) {
   const cadastrarAluno = async (data: any) => {
     try {
       const response = await api.post("/alunos", data);
+
       if (response.status === 200 || response.status === 201) {
+        reset({
+          nome: "",
+          matricula: "",
+          curso: "",
+        });
+
         Alert.alert("Sucesso", "Aluno cadastrado com sucesso!");
-        if (navigation) navigation.navigate("HomeAlunos");
+        navigation.navigate("ListarAlunosTab");
       }
     } catch (error) {
       console.error("Erro na requisição: ", error);
@@ -55,30 +52,29 @@ export default function CriarAluno({ navigation }: any) {
   };
 
   return (
-    <SafeAreaView style={styles.criarWrapper}>
-
+    <View style={[styles.criarWrapper, { backgroundColor: cores.background }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{ flex: 1 }}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
           <ScrollView 
             contentContainerStyle={styles.scrollContainer}
             showsVerticalScrollIndicator={false}
             keyboardShouldPersistTaps="handled"
           >
-            <Text style={styles.criarTitle}>Cadastrar Novo Aluno</Text>
+            <Text style={[styles.criarTitle, { color: cores.texto }]}>Cadastrar Novo Aluno</Text>
 
-            <View style={styles.formulario}>
+            <View style={[styles.formulario, { backgroundColor: cores.card, borderColor: cores.borda }]}>
+              
               <Controller
                 control={control}
                 name="nome"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
                     placeholder="Nome do Aluno"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor={cores.textoSecundario}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -94,9 +90,9 @@ export default function CriarAluno({ navigation }: any) {
                 name="matricula"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
                     placeholder="Matrícula"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor={cores.textoSecundario}
                     keyboardType="numeric" 
                     onBlur={onBlur}
                     onChangeText={onChange}
@@ -113,9 +109,9 @@ export default function CriarAluno({ navigation }: any) {
                 name="curso"
                 render={({ field: { onChange, onBlur, value } }) => (
                   <TextInput
-                    style={styles.input}
+                    style={[styles.input, { backgroundColor: cores.background, color: cores.texto, borderColor: cores.borda }]}
                     placeholder="Curso"
-                    placeholderTextColor="#9ca3af"
+                    placeholderTextColor={cores.textoSecundario}
                     onBlur={onBlur}
                     onChangeText={onChange}
                     value={value}
@@ -137,50 +133,43 @@ export default function CriarAluno({ navigation }: any) {
           </ScrollView>
         </TouchableWithoutFeedback>
       </KeyboardAvoidingView>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   criarWrapper: {
     flex: 1,
-    backgroundColor: "#f3f4f6", 
   },
   scrollContainer: {
-    flexGrow: 1, // Garante o comportamento correto de rolagem interna
+    flexGrow: 1, 
     padding: 20,
-    justifyContent: "center", // Deixa o formulário centralizado se sobrar espaço
+    justifyContent: "center",
   },
   criarTitle: {
     fontSize: 24,
     fontWeight: "700",
-    color: "#1e3a5f",
     marginBottom: 20,
     textAlign: "center",
   },
   formulario: {
     width: "100%",
-    backgroundColor: "white",
     padding: 24,
     borderRadius: 10,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
-    shadowColor: "#1e3a5f",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
+    shadowOpacity: 0.05,
+    shadowRadius: 12,
     elevation: 4,
-    marginBottom: 20, // Margem inferior extra para não colar no fim da rolagem
+    marginBottom: 20,
   },
   input: {
     paddingVertical: 12,
     paddingHorizontal: 14,
-    borderWidth: 2,
-    borderColor: "#e5e7eb",
+    borderWidth: 1.5,
     borderRadius: 8,
     fontSize: 14,
-    backgroundColor: "#f9fafb",
-    color: "#000000",
     marginBottom: 14,
   },
   btnSalvar: {
