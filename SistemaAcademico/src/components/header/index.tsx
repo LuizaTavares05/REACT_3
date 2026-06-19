@@ -10,7 +10,7 @@ interface HeaderProps {
 
 export default function Header({ noLogin = false, naoVoltar = false }: HeaderProps) {
   const navigation = useNavigation<any>();
-  const { logout, primeiroNome } = useAuth();
+  const { logout, primeiroNome, cores, isDarkMode, toggleTheme } = useAuth();
 
   function handleLogout() {
     logout();
@@ -22,9 +22,19 @@ export default function Header({ noLogin = false, naoVoltar = false }: HeaderPro
   }
 
   return (
-    <View style={styles.headerContainer}>
+    <View style={[styles.headerContainer, { backgroundColor: cores.primaria }]}>
       <View style={styles.linhaSuperior}>
         <Text style={styles.titulo}>Sistema Acadêmico</Text>
+
+        <TouchableOpacity 
+          style={[styles.btnTema, { backgroundColor: isDarkMode ? '#f5f6fa' : '#121212' }]} 
+          onPress={toggleTheme}
+          activeOpacity={0.8}
+        >
+          <Text style={[styles.btnTemaTexto, { color: isDarkMode ? '#121212' : '#f5f6fa' }]}>
+            {isDarkMode ? '☀️ Claro' : '🌙 Escuro'}
+          </Text>
+        </TouchableOpacity>
       </View>
 
       {!noLogin && (
@@ -58,7 +68,6 @@ export default function Header({ noLogin = false, naoVoltar = false }: HeaderPro
 
 const styles = StyleSheet.create({
   headerContainer: {
-    backgroundColor: '#1e3a5f',
     paddingTop: 50,            
     paddingBottom: 16,
     paddingHorizontal: 20,
@@ -83,14 +92,14 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     letterSpacing: 0.5,
   },
-  btnTema: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 20,
+  btnTema: { 
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 15,
   },
-  btnTemaTexto: {
+  btnTemaTexto: { 
     fontSize: 12,
-    fontWeight: '600',
+    fontWeight: '700',
   },
   linhaInferior: {
     flexDirection: 'row',

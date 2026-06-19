@@ -1,9 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 
 export default function Footer() {
+  const { cores } = useAuth();
+
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, { backgroundColor: cores.primaria }]}>
       <Text style={styles.texto}>© 2026 Serratec - Grupo Dois</Text>
     </View>
   );
@@ -11,7 +14,6 @@ export default function Footer() {
 
 const styles = StyleSheet.create({
   footer: {
-    backgroundColor: '#1e3a5f', 
     padding: 20,
     width: '100%',
     alignItems: 'center',

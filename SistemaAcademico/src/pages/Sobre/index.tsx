@@ -1,65 +1,68 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { useAuth } from '../../context/AuthContext'; 
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Sobre({ navigation }: any) {
+  const { cores } = useAuth(); 
 
-          const integrantes = [
-            {
-                id: 1,
-                nome: 'Gabriel Aguiar',
-                foto: require('../../../assets/Gabriel.jpg'),
-            },
-            {
-                id: 2,
-                nome: 'Luiza Tavares',
-                foto: require('../../../assets/Luiza.jpg'),
-            },
-            {
-                id: 3,
-                nome: 'Danielle Carvalho',
-                foto: require('../../../assets/Danielle.jpg'),
-            },
-            {
-                id: 4,
-                nome: 'Vanessa Xavier',
-                foto: require('../../../assets/Vanessa.jpg'),
-            },
-            {
-                id: 5,
-                nome: 'Pedro Reis',
-                foto: require('../../../assets/Pedro.jpeg'),
-            },
-        ];
+  const integrantes = [
+    {
+        id: 1,
+        nome: 'Gabriel Aguiar',
+        foto: require('../../../assets/Gabriel.jpg'),
+    },
+    {
+        id: 2,
+        nome: 'Luiza Tavares',
+        foto: require('../../../assets/Luiza.jpg'),
+    },
+    {
+        id: 3,
+        nome: 'Danielle Carvalho',
+        foto: require('../../../assets/Danielle.jpg'),
+    },
+    {
+        id: 4,
+        nome: 'Vanessa Xavier',
+        foto: require('../../../assets/Vanessa.jpg'),
+    },
+    {
+        id: 5,
+        nome: 'Pedro Reis',
+        foto: require('../../../assets/Pedro.jpeg'),
+    },
+  ];
 
   return (
-    <View style={styles.telaContainer}>
+    <View style={[styles.telaContainer, { backgroundColor: cores.background }]}>
       <Header/>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.conteudoPrincipal}>
-          <Text style={styles.titulo}>Sobre este trabalho</Text>
+          
+          <Text style={[styles.titulo, { color: cores.texto }]}>Sobre este trabalho</Text>
 
-          <Text style={styles.descricao}>
+          <Text style={[styles.descricao, { color: cores.textoSecundario }]}>
             Este é um aplicativo acadêmico de exemplo criado como trabalho prático. O objetivo
             é gerenciar informações básicas de alunos e disciplinas, permitindo visualizar,
             criar e editar registros em uma interface simples e intuitiva.
           </Text>
 
-          <Text style={styles.descricao}>
+          <Text style={[styles.descricao, { color: cores.textoSecundario }]}>
             Tecnologias: React Native + Expo. Estrutura do projeto pensada para facilitar a
             extensão: componentes reutilizáveis (Header, Footer), navegação entre páginas e
             telas responsivas.
           </Text>
 
-           <Text style={styles.subtitulo}>Integrantes do grupo</Text>
+          <Text style={[styles.subtitulo, { color: cores.texto }]}>Integrantes do grupo</Text>
 
           <View style={styles.cardsContainer}>
             {integrantes.map((integrante) => (
-              <View key={integrante.id} style={styles.card}>
+              <View key={integrante.id} style={[styles.card, { backgroundColor: cores.card }]}>
                 <Image source={integrante.foto} style={styles.foto} />
-                <Text style={styles.nomeIntegrante}>{integrante.nome}</Text>
+                <Text style={[styles.nomeIntegrante, { color: cores.texto }]}>{integrante.nome}</Text>
               </View>
             ))}
           </View>
@@ -75,7 +78,6 @@ export default function Sobre({ navigation }: any) {
 const styles = StyleSheet.create({
   telaContainer: {
     flex: 1,
-    backgroundColor: '#f5f6fa',
   },
 
   scrollContainer: {
@@ -94,22 +96,19 @@ const styles = StyleSheet.create({
   titulo: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#2c3e50',
     textAlign: 'center',
     marginBottom: 15,
   },
 
-    subtitulo: {
+  subtitulo: {
     fontSize: 18,
     fontWeight: '600',
-    color: '#2c3e50',
     textAlign: 'center',
     marginBottom: 15,
   },
 
   descricao: {
     fontSize: 16,
-    color: '#555',
     textAlign: 'center',
     marginBottom: 12,
     lineHeight: 22,
@@ -125,7 +124,6 @@ const styles = StyleSheet.create({
 
   card: {
     width: 140,
-    backgroundColor: '#ffffff',
     borderRadius: 12,
     padding: 15,
     alignItems: 'center',
@@ -147,7 +145,6 @@ const styles = StyleSheet.create({
   nomeIntegrante: {
     fontSize: 15,
     fontWeight: '500',
-    color: '#2c3e50',
     textAlign: 'center',
   },
 });

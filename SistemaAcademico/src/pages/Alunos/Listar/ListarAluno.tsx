@@ -1,15 +1,7 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
-  StyleSheet,
-  Alert
-} from "react-native";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from "@react-navigation/native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, TextInput, FlatList, TouchableOpacity, StyleSheet, Alert } from "react-native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../../context/AuthContext"; 
 import api from "../../../services/api";
 
 export default function ListarAlunos() {
@@ -17,6 +9,7 @@ export default function ListarAlunos() {
   const [busca, setBusca] = useState("");
   const [carregando, setCarregando] = useState(false);
   const navigation = useNavigation<any>();
+  const { cores, isDarkMode } = useAuth(); 
 
   const buscarAlunos = async () => {
     try {
@@ -32,7 +25,6 @@ export default function ListarAlunos() {
   };
 
   const confirmarExclusao = (id: number, nome: string) => {
-
     Alert.alert(
       "Confirmar Exclusão",
       `Tem certeza que deseja excluir o aluno ${nome || ""}?`,
@@ -57,13 +49,15 @@ export default function ListarAlunos() {
       }
     } catch (error) {
       console.error("Erro ao deletar aluno: ", error);
-      Alert.alert("Erro", "Não foi possível excluir o aluno.");
+      Alert.alert("Erro", "Não foi possível excluir the aluno.");
     }
   };
 
-  useEffect(() => {
-    buscarAlunos();
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      buscarAlunos();
+    }, [])
+  );
 
   const alunosFiltrados = listaAlunos.filter((aluno) => {
     const termo = busca.toLowerCase();
@@ -73,45 +67,59 @@ export default function ListarAlunos() {
     );
   });
 
-  const renderItemAluno = ({ item, index }: any) => (
-    <View
-      style={[styles.card, index % 2 === 0 ? styles.cardPar : styles.cardImpar]}
-    >
-      <View style={styles.cardHeader}>
-        <Text style={styles.cardId}>ID: {item.id}</Text>
-        <Text style={styles.cardMatricula}>Matrícula: {item.matricula}</Text>
+  const renderItemAluno = ({ item, index }: any) => {
+    const backgroundDoCard = isDarkMode 
+      ? cores.card 
+      : (index % 2 === 0 ? "#ffffff" : "#f9fafb");
+
+    return (
+      <View
+        style={[
+          styles.card, 
+          { backgroundColor: backgroundDoCard, borderColor: cores.borda }
+        ]}
+      >
+        <View style={styles.cardHeader}>
+          <Text style={[styles.cardId, { color: cores.textoSecundario }]}>ID: {item.id}</Text>
+          <Text style={[styles.cardMatricula, { color: cores.textoSecundario }]}>Matrícula: {item.matricula}</Text>
+        </View>
+
+        <Text style={[styles.cardNome, { color: cores.texto }]}>{item.nome}</Text>
+        <Text style={[styles.cardCurso, { color: cores.textoSecundario }]}>Curso: {item.curso}</Text>
+
+        <View style={[styles.acoesContainer, { borderTopColor: isDarkMode ? cores.borda : "#f3f4f6" }]}>
+          <TouchableOpacity
+            style={[styles.btnTabela, styles.btnEditar]}
+            onPress={() => navigation.navigate("EditarAluno", { id: item.id })}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.btnTexto}>Editar</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.btnTabela, styles.btnExcluir]}
+            onPress={() => confirmarExclusao(item.id, item.nome)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.btnTexto}>Excluir</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <Text style={styles.cardNome}>{item.nome}</Text>
-      <Text style={styles.cardCurso}>Curso: {item.curso}</Text>
-
-      <View style={styles.acoesContainer}>
-        <TouchableOpacity
-          style={[styles.btnTabela, styles.btnEditar]}
-          onPress={() => navigation.navigate("EditarAluno", { id: item.id })}
-        >
-          <Text style={styles.btnTexto}>Editar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[styles.btnTabela, styles.btnExcluir]}
-          onPress={() => confirmarExclusao(item.id, item.nome)}
-        >
-          <Text style={styles.btnTexto}>Excluir</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  );
+    );
+  };
 
   return (
-    <SafeAreaView style={styles.alunosWrapper}>
-      <Text style={styles.alunosTitle}>Lista de Alunos Cadastrados</Text>
+    <View style={[styles.alunosWrapper, { backgroundColor: cores.background }]}>
+      <Text style={[styles.alunosTitle, { color: cores.texto }]}>Lista de Alunos Cadastrados</Text>
 
       <View style={styles.searchContainer}>
         <TextInput
-          style={styles.searchInput}
+          style={[
+            styles.searchInput, 
+            { backgroundColor: cores.card, color: cores.texto, borderColor: cores.borda }
+          ]}
           placeholder="Filtrar por nome ou matrícula"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={cores.textoSecundario}
           value={busca}
           onChangeText={setBusca}
         />
@@ -123,32 +131,31 @@ export default function ListarAlunos() {
         renderItem={renderItemAluno}
         refreshing={carregando}
         onRefresh={buscarAlunos}
+        showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
-          <View style={styles.mensagemVaziaContainer}>
-            <Text style={styles.mensagemVazia}>
+          <View style={[styles.mensagemVaziaContainer, { backgroundColor: cores.card, borderColor: cores.borda }]}>
+            <Text style={[styles.mensagemVazia, { color: cores.textoSecundario }]}>
               {listaAlunos.length === 0
                 ? "Nenhum aluno cadastrado até o momento."
                 : "Nenhum aluno ou matrícula corresponde à busca."}
             </Text>
           </View>
         )}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: 30 }}
       />
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   alunosWrapper: {
     flex: 1,
-    backgroundColor: "#f3f4f6",
     paddingHorizontal: 16,
     paddingTop: 16,
   },
   alunosTitle: {
     fontSize: 22,
     fontWeight: "700",
-    color: "#1e3a5f",
     marginBottom: 16,
     textAlign: "center",
   },
@@ -158,46 +165,31 @@ const styles = StyleSheet.create({
   searchInput: {
     paddingVertical: 10,
     paddingHorizontal: 14,
-    backgroundColor: "#f9fafb",
-    borderWidth: 2,
-    borderColor: "#e5e7eb",
+    borderWidth: 1.5,
     borderRadius: 8,
     fontSize: 14,
-    color: "#000000",
   },
   mensagemVaziaContainer: {
-    backgroundColor: "white",
     padding: 20,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
     alignItems: "center",
     marginTop: 10,
   },
   mensagemVazia: {
-    color: "#64748b",
     fontSize: 15,
     textAlign: "center",
   },
   card: {
-    backgroundColor: "white",
     borderRadius: 10,
     padding: 16,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#e5e7eb",
-    // Sombra do Card
-    shadowColor: "#1e3a5f",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
+    shadowOpacity: 0.04,
+    shadowRadius: 6,
     elevation: 2,
-  },
-  cardPar: {
-    backgroundColor: "#ffffff",
-  },
-  cardImpar: {
-    backgroundColor: "#f9fafb", // Zebrado equivalente ao CSS original
   },
   cardHeader: {
     flexDirection: "row",
@@ -207,29 +199,24 @@ const styles = StyleSheet.create({
   cardId: {
     fontSize: 12,
     fontWeight: "700",
-    color: "#64748b",
   },
   cardMatricula: {
     fontSize: 12,
     fontWeight: "600",
-    color: "#64748b",
   },
   cardNome: {
     fontSize: 18,
     fontWeight: "700",
-    color: "#1f2937",
     marginBottom: 4,
   },
   cardCurso: {
     fontSize: 14,
-    color: "#4b5563",
     marginBottom: 12,
   },
   acoesContainer: {
     flexDirection: "row",
     gap: 8,
     borderTopWidth: 1,
-    borderTopColor: "#f3f4f6",
     paddingTop: 12,
   },
   btnTabela: {
