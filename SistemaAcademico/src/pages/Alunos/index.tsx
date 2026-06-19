@@ -1,165 +1,124 @@
-import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, } from "react-native";
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useNavigationState } from '@react-navigation/native';
 
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
+// Importação dos componentes Header e Footer
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
+
+// Importe as telas
+import ListarAlunos from './Listar/ListarAluno';
+import CriarAluno from './Criar/CriarAluno';
+import EditarAluno from './Editar/EditarAluno';
+
+const Tab = createMaterialTopTabNavigator();
+const Stack = createStackNavigator();
+
+function AbasAlunos() {
+  return (
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: '#1e3a5f',
+        tabBarInactiveTintColor: '#64748b',
+        tabBarLabelStyle: { fontSize: 13, fontWeight: '700', letterSpacing: 0.3 },
+        tabBarIndicatorStyle: {
+          backgroundColor: '#1e3a5f',
+          height: 3,
+          borderRadius: 2,
+        },
+        tabBarStyle: {
+          backgroundColor: '#f3f4f6',
+          elevation: 0,
+          shadowOpacity: 0,
+          borderBottomWidth: 2,
+          borderBottomColor: '#e5e7eb',
+          marginBottom: 16,
+        },
+        tabBarPressColor: 'rgba(30, 58, 95, 0.05)',
+      }}
+    >
+      <Tab.Screen 
+        name="ListarAlunosTab" 
+        component={ListarAlunos} 
+        options={{ tabBarLabel: '📋 Listar Alunos' }}
+      />
+      <Tab.Screen 
+        name="CriarAlunoTab" 
+        component={CriarAluno} 
+        options={{ tabBarLabel: '➕ Novo Aluno' }}
+      />
+    </Tab.Navigator>
+  );
+}
 
 export default function Alunos() {
+  const nomeDoUsuarioLogado = "Aluno";
+
+  const estadoDaNavegacao = useNavigationState(state => state);
+
+  const obterNomeRotaAtual = (state: any): string => {
+    if (!state || !state.routes || state.index === undefined) return '';
+    const route = state.routes[state.index];
+    if (route.state) {
+      return obterNomeRotaAtual(route.state);
+    }
+    return route.name;
+  };
+
+  const rotaAtiva = obterNomeRotaAtual(estadoDaNavegacao);
+
+  const deveMostrarHeaderEFooter = rotaAtiva !== 'EditarAluno' && rotaAtiva !== 'CriarAlunoTab';
 
   return (
-    <View style={styles.telaContainer}>
-      <Header/>
+    <SafeAreaView style={styles.container}>
+      {deveMostrarHeaderEFooter && <Header nomeUsuario={nomeDoUsuarioLogado} />}
 
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <View style={styles.container}>
+      {deveMostrarHeaderEFooter && (
+        <View style={styles.headerContainer}>
           <Text style={styles.titulo}>Portal dos Alunos</Text>
-
-          <Text style={styles.subtitulo}>
-            Gerencie as informações dos estudantes e faça novos cadastros
-          </Text>
-
-          <View style={styles.tabsContainer}>
-            <TouchableOpacity
-              style={styles.card}
-              onPress={() => alert("Listar Alunos")}
-              activeOpacity={0.6}
-            >
-              <Text style={[styles.tabText, styles.tabTextActive]}>
-                📋 Listar Alunos
-              </Text>
-
-              <View style={styles.activeIndicator} />
-            </TouchableOpacity>
-
-            <TouchableOpacity 
-            style={styles.card} 
-            onPress={() => alert("Adicionar Novo Aluno")} 
-            activeOpacity={0.6}
-            > 
-            <Text style={styles.tabText}>➕ Novo Aluno</Text>
-            </TouchableOpacity>
-          </View>
-
-          <View style={styles.contentWrapper}>
-            <View style={styles.card}>
-              <Text style={styles.cardTitulo}>Área de Conteúdo</Text>
-
-              <Text style={styles.cardDescricao}>
-                Aqui será exibida a listagem dos alunos ou o formulário de
-                cadastro.
-              </Text>
-            </View>
-          </View>
+          <Text style={styles.subtitulo}>Gerencie as informações dos estudantes e faça novos cadastros</Text>
         </View>
+      )}
 
-        <Footer />
-      </ScrollView>
-    </View>
+      <View style={styles.conteudoNavegacao}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="HomeAlunos" component={AbasAlunos} />
+          <Stack.Screen name="EditarAluno" component={EditarAluno} />
+        </Stack.Navigator>
+      </View>
+
+      {deveMostrarHeaderEFooter && <Footer />}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  telaContainer: {
-    flex: 1,
-    backgroundColor: "#f5f6fa",
-  },
-
-  scrollContainer: {
-    flexGrow: 1,
-    justifyContent: "space-between",
-  },
-
   container: {
-    padding: 24,
-    width: "100%",
+    flex: 1,
+    backgroundColor: '#f3f4f6',
   },
-
+  headerContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 15,
+    backgroundColor: '#f3f4f6',
+  },
   titulo: {
-    fontSize: 32,
-    fontWeight: "700",
-    marginBottom: 8,
-    color: "#1e3a5f",
+    fontSize: 26,
+    fontWeight: '700',
+    color: '#1e3a5f',
+    marginBottom: 4,
   },
-
   subtitulo: {
-    color: "#64748b",
-    marginBottom: 24,
-    fontSize: 15,
-    fontWeight: "500",
-  },
-
-  tabsContainer: {
-    flexDirection: "row",
-    gap: 12,
-    marginBottom: 28,
-    borderBottomWidth: 2,
-    borderBottomColor: "#e5e7eb",
-    paddingBottom: 12,
-  },
-
-  tabLink: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderTopLeftRadius: 8,
-    borderTopRightRadius: 8,
-    position: "relative",
-  },
-
-  tabLinkActive: {
-    backgroundColor: "rgba(30, 58, 95, 0.08)",
-  },
-
-  tabText: {
-    color: "#64748b",
-    fontSize: 15,
-    fontWeight: "700",
-    letterSpacing: 0.3,
-  },
-
-  tabTextActive: {
-    color: "#1e3a5f",
-  },
-
-  activeIndicator: {
-    position: "absolute",
-    left: 0,
-    right: 0,
-    bottom: -14,
-    height: 3,
-    backgroundColor: "#1e3a5f",
-    borderRadius: 2,
-  },
-
-  contentWrapper: {
-    minHeight: 300,
-  },
-
-  card: {
-    backgroundColor: "#ffffff",
-    borderRadius: 12,
-    padding: 24,
-
-    elevation: 4,
-
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
-  },
-
-  cardTitulo: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#2c3e50",
+    fontSize: 13,
+    color: '#64748b',
+    fontWeight: '500',
     marginBottom: 12,
+    lineHeight: 18,
   },
-
-  cardDescricao: {
-    fontSize: 14,
-    color: "#666",
-    lineHeight: 22,
-  },
+  conteudoNavegacao: {
+    flex: 1,
+  }
 });
