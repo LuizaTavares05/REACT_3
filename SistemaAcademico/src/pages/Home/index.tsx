@@ -4,16 +4,10 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Home({ navigation }: any) {
-  const nomeDoUsuarioLogado = 'Visitante';
-
-    useEffect(() => {
-    alert(`Bem-Vindo! ${nomeDoUsuarioLogado}`)
-
-  }, []);
 
   return (
     <View style={styles.telaContainer}>
-      <Header nomeUsuario={nomeDoUsuarioLogado} />
+    <Header naoVoltar={true}/>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.conteudoPrincipal}>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { useAuth } from '../../context/AuthContext';
 import Input from '../../components/Input';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -7,11 +8,38 @@ import Footer from '../../components/Footer';
 export default function Login({ navigation }: any) {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
+    const [carregando, setCarregando] = useState(false);
+
+    const { login } = useAuth();
+
+    async function handleEntrar() {
+        if (!email.trim() || !senha.trim()) {
+            Alert.alert("Campos Obrigatórios", "Preencha o e-mail e a senha.");
+            return;
+        }
+
+        try {
+            setCarregando(true);
+            await login(email.trim(), senha);
+            navigation.navigate("Home");
+
+        } catch (error: any) {
+            if (error.response && error.response.status === 401) {
+                Alert.alert("Acesso Negado", "Email ou senha incorretos.");
+            } else {
+                Alert.alert(
+                    "Erro de Conexão", 
+                    "Não foi possível conectar ao servidor."
+                );
+            }
+        } finally {
+            setCarregando(false);
+        }
+    }
 
     return (
         <View style={styles.telaContainer}>
-            <Header nomeUsuario="Visitante" />
-
+            <Header noLogin={true} />
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.centralizador}>
                     
@@ -42,15 +70,15 @@ export default function Login({ navigation }: any) {
                             </View>
                         
                             <TouchableOpacity
-                                style={styles.btnEntrar}
-                                onPress={() => {
-                                    if (email && senha) {
-                                        navigation.navigate("Home");
-                                    }else {
-                                        alert("Preencha email e senha")
-                                    }
-                                }}>
-                                <Text style={styles.btnEntrarTexto}>Entrar no Sistema</Text>
+                                style={[styles.btnEntrar, carregando && { opacity: 0.7 }]}
+                                onPress={handleEntrar}
+                                disabled={carregando}
+                            >
+                                {carregando ? (
+                                    <ActivityIndicator color="white" />
+                                ) : (
+                                    <Text style={styles.btnEntrarTexto}>Entrar no Sistema</Text>
+                                )}
                             </TouchableOpacity>
                         </View>
 
@@ -132,6 +160,7 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
         shadowRadius: 12,
+        minHeight: 48,
     },
     btnEntrarTexto: {
         color: 'white',

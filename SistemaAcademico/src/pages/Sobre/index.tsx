@@ -4,7 +4,6 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 export default function Sobre({ navigation }: any) {
-  const nomeDoUsuarioLogado = 'Visitante';
 
           const integrantes = [
             {
@@ -36,7 +35,7 @@ export default function Sobre({ navigation }: any) {
 
   return (
     <View style={styles.telaContainer}>
-      <Header nomeUsuario={nomeDoUsuarioLogado} />
+      <Header/>
 
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         <View style={styles.conteudoPrincipal}>
